@@ -44,11 +44,41 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitMostrar([NotNull] SSJParser.MostrarContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.declaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDeclaration([NotNull] SSJParser.DeclarationContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.showCommand"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitShowCommand([NotNull] SSJParser.ShowCommandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.conditionalCommand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitConditionalCommand([NotNull] SSJParser.ConditionalCommandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.ifCommad"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIfCommad([NotNull] SSJParser.IfCommadContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.elseCommand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitElseCommand([NotNull] SSJParser.ElseCommandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.sentenceCommand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSentenceCommand([NotNull] SSJParser.SentenceCommandContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.showString"/>.
 	/// </summary>
@@ -67,4 +97,10 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitShowVariables([NotNull] SSJParser.ShowVariablesContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.type"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitType([NotNull] SSJParser.TypeContext context);
 }
