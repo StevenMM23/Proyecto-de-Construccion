@@ -9,7 +9,8 @@ declaration| loopCommand;
 declaration: type TEXTO 
 (IGUAL (STRING | NUMERO))?;
 
-showCommand: 'show' PARENTESIS_IZQUIERDO (TEXTO | NUMERO | STRING) PARENTESIS_DERECHO;
+showCommand: 'show' PARENTESIS_IZQUIERDO 
+VARIABLE PARENTESIS_DERECHO;
 
 conditionalCommand: ifCommand block elseBlock?;
 
@@ -17,32 +18,43 @@ ifCommand: 'if' PARENTESIS_IZQUIERDO
 expression PARENTESIS_DERECHO;
 
 loopCommand: 
-'for' PARENTESIS_IZQUIERDO declarationLoop 
-';' conditionalLoop ';' operationLoop PARENTESIS_DERECHO;
+'for' PARENTESIS_IZQUIERDO 
+declarationLoop 
+';' conditionalLoop ';' 
+operationLoop PARENTESIS_DERECHO
+LLAVE_IZ mostrar* LLAVE_DR | 
+
+'while' PARENTESIS_IZQUIERDO
+conditionalLoop PARENTESIS_DERECHO
+LLAVE_IZ mostrar* LLAVE_DR;
 
 declarationLoop: declaration; 
 
 conditionalLoop: 
-TEXTO OPERADOR_RELACIONAL NUMERO; 
+VARIABLE OPERADOR_RELACIONAL VARIABLE; 
 
-operationLoop: TEXTO ((OPERADOR_ARITMETICO)* | OPERADOR_ARITMETICO '=') NUMERO?;
+operationLoop: TEXTO (
+(OPERADOR_ARITMETICO)* |
+OPERADOR_ARITMETICO '=') NUMERO?;
 
 
 elseBlock: 'else' block;
 
 block: LLAVE_IZ (mostrar)* LLAVE_DR;
 
-expression: factor (OPERADOR_RELACIONAL factor)*;
+expression: factor (OPERADOR_RELACIONAL 
+factor)*;
 
 factor: term (OPERADOR_ARITMETICO term)*;
 
-// A ; B ; C
+
 term: TEXTO | NUMERO | STRING | PARENTESIS_IZQUIERDO expression PARENTESIS_DERECHO;
 
 type: 'int' | 'string';
 
 // Symbols used
 PARENTESIS_DERECHO: ')';
+VARIABLE: (NUMERO|TEXTO|STRING);
 PARENTESIS_IZQUIERDO: '(';
 COMILLAS: '"';
 LLAVE_IZ: '{';
