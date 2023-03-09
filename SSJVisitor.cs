@@ -50,6 +50,12 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitDeclaration([NotNull] SSJParser.DeclarationContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.asignation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAsignation([NotNull] SSJParser.AsignationContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.postDeclaration"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -79,12 +85,6 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitLoopCommand([NotNull] SSJParser.LoopCommandContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.declarationLoop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitDeclarationLoop([NotNull] SSJParser.DeclarationLoopContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.conditionalLoop"/>.
 	/// </summary>
