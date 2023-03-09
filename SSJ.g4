@@ -4,10 +4,14 @@ program: mostrar+ EOF;
 
 mostrar: showCommand | 
 conditionalCommand | 
-declaration| loopCommand;
+declaration| postDeclaration| loopCommand;
 
-declaration: type TEXTO 
-(IGUAL (STRING | NUMERO))?;
+declaration: type VARIABLE 
+(IGUAL (VARIABLE))? | postDeclaration;
+
+postDeclaration: VARIABLE 
+(IGUAL (VARIABLE))?;
+
 
 showCommand: 'show' PARENTESIS_IZQUIERDO 
 VARIABLE PARENTESIS_DERECHO;
@@ -19,7 +23,7 @@ expression PARENTESIS_DERECHO;
 
 loopCommand: 
 'for' PARENTESIS_IZQUIERDO 
-declarationLoop 
+(declarationLoop | postDeclaration)   
 ';' conditionalLoop ';' 
 operationLoop PARENTESIS_DERECHO
 LLAVE_IZ mostrar* LLAVE_DR | 
@@ -28,14 +32,14 @@ LLAVE_IZ mostrar* LLAVE_DR |
 conditionalLoop PARENTESIS_DERECHO
 LLAVE_IZ mostrar* LLAVE_DR;
 
-declarationLoop: declaration; 
+declarationLoop: (declaration | postDeclaration); 
 
 conditionalLoop: 
-VARIABLE OPERADOR_RELACIONAL VARIABLE; 
+VARIABLE OPERADOR_RELACIONAL? VARIABLE?; 
 
-operationLoop: TEXTO (
+operationLoop: VARIABLE (
 (OPERADOR_ARITMETICO)* |
-OPERADOR_ARITMETICO '=') NUMERO?;
+OPERADOR_ARITMETICO '=') VARIABLE?;
 
 
 elseBlock: 'else' block;
@@ -54,7 +58,8 @@ type: 'int' | 'string';
 
 // Symbols used
 PARENTESIS_DERECHO: ')';
-VARIABLE: (NUMERO|TEXTO|STRING);
+VARIABLE: (NUMERO|TEXTO|STRING) 
+| (NUMERO|STRING);
 PARENTESIS_IZQUIERDO: '(';
 COMILLAS: '"';
 LLAVE_IZ: '{';
