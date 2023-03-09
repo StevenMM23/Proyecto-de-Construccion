@@ -1,54 +1,39 @@
- grammar SSJ;
-
+grammar SSJ;
 
 program: mostrar+ EOF;
 
-mostrar: showCommand | 
-conditionalCommand | declaration;
+mostrar: showCommand | conditionalCommand | declaration;
 
+declaration: type TEXTO (IGUAL (STRING | NUMERO))?;
 
-declaration: type TEXTO | 
-type TEXTO IGUAL (STRING|NUMERO);
+showCommand: 'show' PARENTESIS_IZQUIERDO (TEXTO | NUMERO | STRING) PARENTESIS_DERECHO;
 
-showCommand: 'show' 
-PARENTESIS_IZQUIERDO 
-(TEXTO|NUMERO|STRING)
-PARENTESIS_DERECHO;
+conditionalCommand: ifCommand block elseBlock?;
 
+ifCommand: 'if' PARENTESIS_IZQUIERDO expression PARENTESIS_DERECHO;
 
-conditionalCommand: (ifCommad|elseCommand) 
-PARENTESIS_IZQUIERDO (showVariables) 
-PARENTESIS_DERECHO;
+elseBlock: 'else' block;
 
+block: LLAVE_IZ (mostrar)* LLAVE_DR;
 
-//CONDITIONS UTILS 
-ifCommad: 'if';
-elseCommand: 'else';
+expression:
+    factor (OPERADOR_RELACIONAL factor)*;
 
-sentenceCommand: LLAVE_IZ (showCommand)*
-LLAVE_DR;
+factor:
+    PARENTESIS_IZQUIERDO expression PARENTESIS_DERECHO |
+    TEXTO OPERADOR_RELACIONAL (STRING | NUMERO | TEXTO) |
+    NUMERO OPERADOR_RELACIONAL factor;
 
+type: 'int' | 'string';
 
-
-//SHOWCOMAND UTILS 
-
-showString: COMILLAS TEXTO* COMILLAS;
-
-showInt: NUMERO;
-
-showVariables: TEXTO;
-
-
-type: 'int' | 'string' ;
-//SIMBOLOS UTILIZADOS
+// Symbols used
 PARENTESIS_DERECHO: ')';
 PARENTESIS_IZQUIERDO: '(';
 COMILLAS: '"';
 LLAVE_IZ: '{';
 LLAVE_DR: '}';
-//OPERADORES DE ASIGNACION
-IGUAL : '=';
-//Generales
+IGUAL: '=';
+OPERADOR_RELACIONAL: '==' | '!=' | '>' | '<' | '>=' | '<=' | '&&';
 NUMERO: [0-9]+;
 STRING: '"' ~["]* '"';
 TEXTO: [a-zA-Z_][a-zA-Z0-9_]*;
