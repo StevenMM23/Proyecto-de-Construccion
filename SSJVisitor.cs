@@ -68,6 +68,30 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitIfCommand([NotNull] SSJParser.IfCommandContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.loopCommand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLoopCommand([NotNull] SSJParser.LoopCommandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.declarationLoop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDeclarationLoop([NotNull] SSJParser.DeclarationLoopContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.conditionalLoop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitConditionalLoop([NotNull] SSJParser.ConditionalLoopContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.operationLoop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOperationLoop([NotNull] SSJParser.OperationLoopContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.elseBlock"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -91,6 +115,12 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitFactor([NotNull] SSJParser.FactorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.term"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTerm([NotNull] SSJParser.TermContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.type"/>.
 	/// </summary>
