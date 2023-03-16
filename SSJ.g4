@@ -1,6 +1,6 @@
 grammar SSJ;
 
-program: mostrar+ EOF;
+program: mostrar* EOF;
 
 mostrar: showCommand | 
 conditionalCommand | 
@@ -19,8 +19,9 @@ VARIABLE PARENTESIS_DERECHO;
 conditionalCommand: ifCommand block elseBlock?;
 
 ifCommand: 'if' PARENTESIS_IZQUIERDO
-expression PARENTESIS_DERECHO;
+(ifConditional ('&&' | '||')?)* PARENTESIS_DERECHO;
 
+ifConditional: (VARIABLE OPERADOR_RELACIONAL VARIABLE); 
 loopCommand: 
 'for' PARENTESIS_IZQUIERDO 
 (declarationLoop | postDeclaration)   
@@ -45,14 +46,6 @@ OPERADOR_ARITMETICO '=') VARIABLE?;
 elseBlock: 'else' block;
 
 block: LLAVE_IZ (mostrar)* LLAVE_DR;
-
-expression: factor (OPERADOR_RELACIONAL 
-factor)*;
-
-factor: term (OPERADOR_ARITMETICO term)*;
-
-
-term: TEXTO | NUMERO | STRING | PARENTESIS_IZQUIERDO expression PARENTESIS_DERECHO;
 
 type: 'int' | 'string';
 

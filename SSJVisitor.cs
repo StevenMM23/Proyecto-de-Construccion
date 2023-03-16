@@ -74,6 +74,12 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitIfCommand([NotNull] SSJParser.IfCommandContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.ifConditional"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIfConditional([NotNull] SSJParser.IfConditionalContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.loopCommand"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -109,24 +115,6 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitBlock([NotNull] SSJParser.BlockContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitExpression([NotNull] SSJParser.ExpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.factor"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitFactor([NotNull] SSJParser.FactorContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.term"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitTerm([NotNull] SSJParser.TermContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.type"/>.
 	/// </summary>
