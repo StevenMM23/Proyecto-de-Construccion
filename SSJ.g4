@@ -7,11 +7,13 @@ conditionalCommand |
 declaration| postDeclaration| loopCommand;
 
 declaration: type VARIABLE 
-(IGUAL (VARIABLE))? | postDeclaration;
+(IGUAL VARIABLE)? arithmeticOperations*  | postDeclaration;
 
 postDeclaration: VARIABLE 
-(IGUAL (VARIABLE))?;
+(IGUAL VARIABLE)? arithmeticOperations* ;
 
+
+arithmeticOperations:  (OPERADOR_ARITMETICO VARIABLE);
 
 showCommand: 'show' PARENTESIS_IZQUIERDO 
 VARIABLE PARENTESIS_DERECHO;
@@ -21,7 +23,10 @@ conditionalCommand: ifCommand block elseBlock?;
 ifCommand: 'if' PARENTESIS_IZQUIERDO
 (ifConditional ('&&' | '||')?)* PARENTESIS_DERECHO;
 
-ifConditional: (VARIABLE OPERADOR_RELACIONAL VARIABLE); 
+ifConditional:
+(VARIABLE OPERADOR_RELACIONAL VARIABLE)
+| (VARIABLE arithmeticOperations OPERADOR_RELACIONAL
+ VARIABLE arithmeticOperations?); 
 loopCommand: 
 'for' PARENTESIS_IZQUIERDO 
 (declarationLoop | postDeclaration)   
@@ -36,7 +41,10 @@ LLAVE_IZ mostrar* LLAVE_DR;
 declarationLoop: (declaration | postDeclaration); 
 
 conditionalLoop: 
-VARIABLE OPERADOR_RELACIONAL? VARIABLE?; 
+VARIABLE OPERADOR_RELACIONAL? VARIABLE? |
+VARIABLE arithmeticOperations* OPERADOR_RELACIONAL 
+VARIABLE arithmeticOperations*?
+; 
 
 operationLoop: VARIABLE (
 (OPERADOR_ARITMETICO)* |

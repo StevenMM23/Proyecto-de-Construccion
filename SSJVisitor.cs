@@ -56,6 +56,12 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitPostDeclaration([NotNull] SSJParser.PostDeclarationContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SSJParser.arithmeticOperations"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArithmeticOperations([NotNull] SSJParser.ArithmeticOperationsContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.showCommand"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
