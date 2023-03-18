@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:\Users\estev\Desktop\Proyecto de Construccion\SSJ.g4 by ANTLR 4.9.2
+// Generated from c:\Users\estev\Desktop\ProyectoDeConstruccion\ProyectoDeConstruccion\ProyectoDeConstruccion\SSJ.g4 by ANTLR 4.9.2
 
 // Unreachable code detected
 #pragma warning disable 0162
