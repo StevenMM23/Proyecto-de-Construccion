@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0B92422F-85C2-4BA4-95B5-1C59AAA63883}</ProjectGuid>
+    <ProjectGuid>{FCD22B7E-905A-4D40-B918-8D7473B8D44D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ProyectoDeConstruccion</RootNamespace>
-    <AssemblyName>ProyectoDeConstruccion</AssemblyName>
+    <RootNamespace>ProyectoConstruccion</RootNamespace>
+    <AssemblyName>ProyectoConstruccion</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
