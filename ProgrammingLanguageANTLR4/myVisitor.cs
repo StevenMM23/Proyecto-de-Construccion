@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime.Misc;
 using System;
+using System.Text;
 
 namespace ProgrammingLanguageANTLR4
 {
@@ -12,11 +13,12 @@ namespace ProgrammingLanguageANTLR4
 
     internal class myVisitor : SSJBaseVisitor<string>
     {
+        private readonly StringBuilder _sb = new StringBuilder();
 
         public override string VisitProgram([NotNull] SSJParser.ProgramContext context)
         {
-            Console.WriteLine($"VisitProgram: {context.GetText()}");
-            return Visit(context.mostrar()[0]);
+            VisitChildren(context);
+            return _sb.ToString();
         }
 
         public override string VisitBlock([NotNull] SSJParser.BlockContext context)
@@ -43,7 +45,7 @@ namespace ProgrammingLanguageANTLR4
         {
             string var_izq = context.VARIABLE()[0].GetText();
             string var_der = context.VARIABLE()[1].GetText();
-            string comparacion, diferencia, mayor, menor, menorQue, mayorQue;
+            string comparacion = null, diferencia, mayor, menor, menorQue, mayorQue;
             switch (context.OPERADOR_RELACIONAL().GetText())
             {
                 case "==":
@@ -59,12 +61,18 @@ namespace ProgrammingLanguageANTLR4
 
             }
 
-            return $"{var_izq} {var_der}";
+            return $"{var_izq} {comparacion} {var_der}";
         }
 
         public override string VisitMostrar([NotNull] SSJParser.MostrarContext context)
         {
-            return Visit(context.conditionalCommand());
+            var content = context.showCommand().VARIABLE().GetText();
+
+            _sb.Append("Console.WriteLine(");
+            _sb.Append(content);
+            _sb.AppendLine(");");
+
+            return base.VisitMostrar(context);
         }
 
         public override string VisitArithmeticOperations([NotNull] SSJParser.ArithmeticOperationsContext context)
