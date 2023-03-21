@@ -1,83 +1,118 @@
-﻿namespace ProgrammingLanguageANTLR4
+﻿using Antlr4.Runtime.Misc;
+using System;
+
+namespace ProgrammingLanguageANTLR4
 {
-    public class myVisitor : SSJBaseVisitor<object>
+    class Condition
     {
-        public override object VisitProgram(SSJParser.ProgramContext context)
+        public string Variable { get; set; }
+        public string ComparisonType { get; set; }
+        public string Value { get; set; }
+    }
+
+    internal class myVisitor : SSJBaseVisitor<string>
+    {
+
+        public override string VisitProgram([NotNull] SSJParser.ProgramContext context)
         {
-            return base.VisitProgram(context);
+            Console.WriteLine($"VisitProgram: {context.GetText()}");
+            return Visit(context.mostrar()[0]);
         }
 
-        public override object VisitMostrar(SSJParser.MostrarContext context)
+        public override string VisitBlock([NotNull] SSJParser.BlockContext context)
         {
-            return base.VisitMostrar(context);
+            return "no hacer nada";
         }
 
-        public override object VisitDeclaration(SSJParser.DeclarationContext context)
+        public override string VisitConditionalCommand([NotNull] SSJParser.ConditionalCommandContext context)
         {
-            return base.VisitDeclaration(context);
+            Console.WriteLine($"VisitConditionalCommand: {context.GetText()}");
+            string cmd = Visit(context.ifCommand());
+            string block = Visit(context.block());
+            return $"{cmd} entonces {block}";
         }
 
-        public override object VisitPostDeclaration(SSJParser.PostDeclarationContext context)
+        public override string VisitIfCommand([NotNull] SSJParser.IfCommandContext context)
         {
-            return base.VisitPostDeclaration(context);
+            Console.WriteLine($"VisitIfCommand: {context.GetText()}");
+            string conditional = Visit(context.ifConditional()[0]);
+            return $"si {conditional}";
         }
 
-        public override object VisitArithmeticOperations(SSJParser.ArithmeticOperationsContext context)
+        public override string VisitIfConditional([NotNull] SSJParser.IfConditionalContext context)
+        {
+            string var_izq = context.VARIABLE()[0].GetText();
+            string var_der = context.VARIABLE()[1].GetText();
+            string comparacion, diferencia, mayor, menor, menorQue, mayorQue;
+            switch (context.OPERADOR_RELACIONAL().GetText())
+            {
+                case "==":
+                    comparacion = "es igual a";
+                    break;
+                case "!=":
+                    diferencia = "es diferente a";
+                    break;
+
+                default:
+                    throw new NotImplementedException(
+                        $"Operador relacional {context.OPERADOR_RELACIONAL().GetText()} no implementado");
+
+            }
+
+            return $"{var_izq} {var_der}";
+        }
+
+        public override string VisitMostrar([NotNull] SSJParser.MostrarContext context)
+        {
+            return Visit(context.conditionalCommand());
+        }
+
+        public override string VisitArithmeticOperations([NotNull] SSJParser.ArithmeticOperationsContext context)
         {
             return base.VisitArithmeticOperations(context);
         }
 
-        public override object VisitShowCommand(SSJParser.ShowCommandContext context)
-        {
-            return base.VisitShowCommand(context);
-        }
-
-        public override object VisitConditionalCommand(SSJParser.ConditionalCommandContext context)
-        {
-            return base.VisitConditionalCommand(context);
-        }
-
-        public override object VisitIfCommand(SSJParser.IfCommandContext context)
-        {
-            return base.VisitIfCommand(context);
-        }
-
-        public override object VisitIfConditional(SSJParser.IfConditionalContext context)
-        {
-            return base.VisitIfConditional(context);
-        }
-
-        public override object VisitLoopCommand(SSJParser.LoopCommandContext context)
-        {
-            return base.VisitLoopCommand(context);
-        }
-
-        public override object VisitDeclarationLoop(SSJParser.DeclarationLoopContext context)
-        {
-            return base.VisitDeclarationLoop(context);
-        }
-
-        public override object VisitConditionalLoop(SSJParser.ConditionalLoopContext context)
+        public override string VisitConditionalLoop([NotNull] SSJParser.ConditionalLoopContext context)
         {
             return base.VisitConditionalLoop(context);
         }
 
-        public override object VisitOperationLoop(SSJParser.OperationLoopContext context)
+        public override string VisitDeclaration([NotNull] SSJParser.DeclarationContext context)
         {
-            return base.VisitOperationLoop(context);
+            return base.VisitDeclaration(context);
         }
 
-        public override object VisitElseBlock(SSJParser.ElseBlockContext context)
+        public override string VisitDeclarationLoop([NotNull] SSJParser.DeclarationLoopContext context)
+        {
+            return base.VisitDeclarationLoop(context);
+        }
+
+        public override string VisitElseBlock([NotNull] SSJParser.ElseBlockContext context)
         {
             return base.VisitElseBlock(context);
         }
 
-        public override object VisitBlock(SSJParser.BlockContext context)
+        public override string VisitLoopCommand([NotNull] SSJParser.LoopCommandContext context)
         {
-            return base.VisitBlock(context);
+            return base.VisitLoopCommand(context);
         }
 
-        public override object VisitType(SSJParser.TypeContext context)
+        public override string VisitOperationLoop([NotNull] SSJParser.OperationLoopContext context)
+        {
+            return base.VisitOperationLoop(context);
+        }
+
+        public override string VisitPostDeclaration([NotNull] SSJParser.PostDeclarationContext context)
+        {
+            return base.VisitPostDeclaration(context);
+        }
+
+        public override string VisitShowCommand([NotNull] SSJParser.ShowCommandContext context)
+        {
+            return base.VisitShowCommand(context);
+        }
+
+        public override string VisitType([NotNull] SSJParser.TypeContext context)
         {
             return base.VisitType(context);
         }
