@@ -11,6 +11,7 @@ namespace ProgrammingLanguageANTLR4
         static void Main(string[] args)
         {
             Console.WriteLine("Hello ");
+            Console.Read();
         }
     }
 }
