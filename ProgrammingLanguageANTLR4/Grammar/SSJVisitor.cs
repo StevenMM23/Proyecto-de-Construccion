@@ -80,11 +80,19 @@ public interface ISSJVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitIfCommand([NotNull] SSJParser.IfCommandContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.ifConditional"/>.
+	/// Visit a parse tree produced by the <c>relational</c>
+	/// labeled alternative in <see cref="SSJParser.ifConditional"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitIfConditional([NotNull] SSJParser.IfConditionalContext context);
+	Result VisitRelational([NotNull] SSJParser.RelationalContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>aritmetico</c>
+	/// labeled alternative in <see cref="SSJParser.ifConditional"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAritmetico([NotNull] SSJParser.AritmeticoContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.loopCommand"/>.
 	/// </summary>

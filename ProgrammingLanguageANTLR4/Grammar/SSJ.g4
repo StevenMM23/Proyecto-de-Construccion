@@ -10,8 +10,7 @@ mostrar:
 	| loopCommand;
 
 declaration:
-	type VARIABLE (IGUAL VARIABLE)? arithmeticOperations*?
-	| postDeclaration;
+	type VARIABLE (IGUAL VARIABLE)? arithmeticOperations*?;
 
 postDeclaration:
 	VARIABLE (IGUAL VARIABLE)? arithmeticOperations*;
@@ -26,10 +25,10 @@ conditionalCommand: ifCommand block elseBlock?;
 ifCommand:
 	'if' PARENTESIS_IZQUIERDO (ifConditional ('&&' | '||')?)* PARENTESIS_DERECHO;
 
-ifConditional: (VARIABLE OPERADOR_RELACIONAL VARIABLE)
+ifConditional: (VARIABLE OPERADOR_RELACIONAL VARIABLE) # relational
 	| (
 		VARIABLE arithmeticOperations OPERADOR_RELACIONAL VARIABLE arithmeticOperations?
-	);
+	) # aritmetico;
 
 loopCommand:
 	'for' PARENTESIS_IZQUIERDO (

@@ -1,2 +1,12 @@
 ﻿show("This is a test!")
 show("Wiiiiii")
+
+if (x > 0)
+{
+    show("If")
+}
+else
+{
+    show("else")
+}
+int gg = 22

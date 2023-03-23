@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime;
 using ProgrammingLanguageANTLR4;
 
-var project = File.ReadAllText($"C:\\Users\\estev\\Desktop\\ProyectoLanguage\\ProgrammingLanguageANTLR4\\test.txt");
+var project = File.ReadAllText($"{Environment.CurrentDirectory}/Files/test.txt");
 
 var inputStream = CharStreams.fromString(project);
 var lexer = new SSJLexer(inputStream);
@@ -11,7 +11,7 @@ var parser = new SSJParser(tokenStream);
 var tree = parser.program();
 var visitor = new Visitor();
 
-var translation = visitor.Visit(tree);
+var translation = visitor.Visit(tree).ToString();
 Console.WriteLine(translation);
 
-Console.ReadKey(true);
+// Console.ReadKey(true);
