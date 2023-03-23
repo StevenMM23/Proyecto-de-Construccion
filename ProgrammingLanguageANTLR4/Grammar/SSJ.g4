@@ -10,8 +10,7 @@ mostrar:
 	| loopCommand;
 
 declaration:
-	type VARIABLE (IGUAL VARIABLE)? arithmeticOperations*?
-	| postDeclaration;
+	type VARIABLE (IGUAL VARIABLE)? arithmeticOperations*;
 
 postDeclaration:
 	VARIABLE (IGUAL VARIABLE)? arithmeticOperations*;
@@ -26,26 +25,27 @@ conditionalCommand: ifCommand block elseBlock?;
 ifCommand:
 	'if' PARENTESIS_IZQUIERDO (ifConditional ('&&' | '||')?)* PARENTESIS_DERECHO;
 
-ifConditional: (VARIABLE OPERADOR_RELACIONAL VARIABLE)
-	| (
-		VARIABLE arithmeticOperations OPERADOR_RELACIONAL VARIABLE arithmeticOperations?
-	);
+ifConditional:
+	VARIABLE OPERADOR_RELACIONAL VARIABLE												# relationalIf
+	| VARIABLE arithmeticOperations OPERADOR_RELACIONAL VARIABLE arithmeticOperations?	# aritmeticoIf
+		;
 
 loopCommand:
-	'for' PARENTESIS_IZQUIERDO (
-		declarationLoop
-		| postDeclaration
-	) ';' conditionalLoop ';' operationLoop PARENTESIS_DERECHO LLAVE_IZ mostrar* LLAVE_DR
-	| 'while' PARENTESIS_IZQUIERDO conditionalLoop PARENTESIS_DERECHO LLAVE_IZ mostrar* LLAVE_DR;
-
-declarationLoop: (declaration | postDeclaration);
+	'for' PARENTESIS_IZQUIERDO (declaration | postDeclaration) ';' conditionalLoop ';' operationLoop
+		PARENTESIS_DERECHO LLAVE_IZ mostrar* LLAVE_DR												# for
+	| 'while' PARENTESIS_IZQUIERDO conditionalLoop PARENTESIS_DERECHO LLAVE_IZ mostrar* LLAVE_DR	#
+		while;
 
 conditionalLoop:
-	VARIABLE OPERADOR_RELACIONAL? VARIABLE?
-	| VARIABLE arithmeticOperations* OPERADOR_RELACIONAL VARIABLE arithmeticOperations*?;
+	VARIABLE (OPERADOR_RELACIONAL VARIABLE)?											# relationalLoop
+	| VARIABLE arithmeticOperations* OPERADOR_RELACIONAL VARIABLE arithmeticOperations*	#
+		aritmeticoLoop;
 
 operationLoop:
-	VARIABLE ((OPERADOR_ARITMETICO)* | OPERADOR_ARITMETICO '=') VARIABLE?;
+	VARIABLE (
+		OPERADOR_ARITMETICO*
+		| OPERADOR_ARITMETICO IGUAL VARIABLE?
+	);
 
 elseBlock: 'else' block;
 

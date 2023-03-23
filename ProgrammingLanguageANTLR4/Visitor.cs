@@ -5,115 +5,308 @@ namespace ProgrammingLanguageANTLR4;
 
 internal class Visitor : SSJBaseVisitor<string>
 {
-    private readonly StringBuilder _sb = new StringBuilder();
-
     public override string VisitProgram([NotNull] SSJParser.ProgramContext context)
     {
-        VisitChildren(context);
-        return _sb.ToString();
-    }
+        var stringBuilder = new StringBuilder();
 
-    public override string VisitBlock([NotNull] SSJParser.BlockContext context)
-    {
-        return "no hacer nada";
-    }
+        foreach (var mostrar in context.mostrar())
+            stringBuilder.AppendLine(Visit(mostrar));
 
-    public override string VisitConditionalCommand([NotNull] SSJParser.ConditionalCommandContext context)
-    {
-        Console.WriteLine($"VisitConditionalCommand: {context.GetText()}");
-        string cmd = Visit(context.ifCommand());
-        string block = Visit(context.block());
-        return $"{cmd} entonces {block}";
-    }
-
-    public override string VisitIfCommand([NotNull] SSJParser.IfCommandContext context)
-    {
-        Console.WriteLine($"VisitIfCommand: {context.GetText()}");
-        string conditional = Visit(context.ifConditional()[0]);
-        return $"si {conditional}";
-    }
-
-    public override string VisitIfConditional([NotNull] SSJParser.IfConditionalContext context)
-    {
-        string var_izq = context.VARIABLE()[0].GetText();
-        string var_der = context.VARIABLE()[1].GetText();
-        string comparacion = null, diferencia, mayor, menor, menorQue, mayorQue;
-        switch (context.OPERADOR_RELACIONAL().GetText())
-        {
-            case "==":
-                comparacion = "es igual a";
-                break;
-            case "!=":
-                diferencia = "es diferente a";
-                break;
-
-            default:
-                throw new NotImplementedException(
-                    $"Operador relacional {context.OPERADOR_RELACIONAL().GetText()} no implementado");
-
-        }
-
-        return $"{var_izq} {comparacion} {var_der}";
-    }
-
-    public override string VisitMostrar([NotNull] SSJParser.MostrarContext context)
-    {
-        var content = context.showCommand().VARIABLE().GetText();
-
-        _sb.Append("Console.WriteLine(");
-        _sb.Append(content);
-        _sb.AppendLine(");");
-
-        return base.VisitMostrar(context);
-    }
-
-    public override string VisitArithmeticOperations([NotNull] SSJParser.ArithmeticOperationsContext context)
-    {
-        return base.VisitArithmeticOperations(context);
-    }
-
-    public override string VisitConditionalLoop([NotNull] SSJParser.ConditionalLoopContext context)
-    {
-        return base.VisitConditionalLoop(context);
-    }
-
-    public override string VisitDeclaration([NotNull] SSJParser.DeclarationContext context)
-    {
-        return base.VisitDeclaration(context);
-    }
-
-    public override string VisitDeclarationLoop([NotNull] SSJParser.DeclarationLoopContext context)
-    {
-        return base.VisitDeclarationLoop(context);
-    }
-
-    public override string VisitElseBlock([NotNull] SSJParser.ElseBlockContext context)
-    {
-        return base.VisitElseBlock(context);
-    }
-
-    public override string VisitLoopCommand([NotNull] SSJParser.LoopCommandContext context)
-    {
-        return base.VisitLoopCommand(context);
-    }
-
-    public override string VisitOperationLoop([NotNull] SSJParser.OperationLoopContext context)
-    {
-        return base.VisitOperationLoop(context);
-    }
-
-    public override string VisitPostDeclaration([NotNull] SSJParser.PostDeclarationContext context)
-    {
-        return base.VisitPostDeclaration(context);
+        var translation = stringBuilder.ToString();
+        return translation;
     }
 
     public override string VisitShowCommand([NotNull] SSJParser.ShowCommandContext context)
     {
-        return base.VisitShowCommand(context);
+        var variable = context.VARIABLE().GetText();
+        var show = $"Console.WriteLine({variable});";
+        return show;
+    }
+
+    public override string VisitConditionalCommand([NotNull] SSJParser.ConditionalCommandContext context)
+    {
+        var stringBuilder = new StringBuilder();
+        var @if = Visit(context.ifCommand());
+        var block = Visit(context.block());
+
+        stringBuilder.AppendLine(@if);
+        stringBuilder.AppendLine(block);
+
+        if (context.elseBlock() != null)
+        {
+            var @else = Visit(context.elseBlock());
+            stringBuilder.AppendLine(@else);
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitIfCommand([NotNull] SSJParser.IfCommandContext context)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append("if (");
+
+        foreach (var condicional in context.ifConditional())
+            stringBuilder.Append(Visit(condicional));
+
+        stringBuilder.Append(")");
+        var translation = stringBuilder.ToString();
+
+        return translation;
+    }
+
+    public override string VisitRelationalIf([NotNull] SSJParser.RelationalIfContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var variable2 = context.VARIABLE()[1].GetText();
+        var operador = context.OPERADOR_RELACIONAL().GetText();
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"{variable1} {operador} {variable2}");
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitAritmeticoIf([NotNull] SSJParser.AritmeticoIfContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var variable2 = context.VARIABLE()[1].GetText();
+        var operador = context.OPERADOR_RELACIONAL().GetText();
+
+        var aritmeticos = new List<string>();
+
+        foreach (var aritmetico in context.arithmeticOperations())
+            aritmeticos.Add(Visit(aritmetico));
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"{variable1} {aritmeticos.First()} {operador} {variable2}");
+
+        if (aritmeticos.Count() > 1)
+            stringBuilder.Append($" {aritmeticos.Last()}");
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitArithmeticOperations([NotNull] SSJParser.ArithmeticOperationsContext context)
+    {
+        var operador = context.OPERADOR_ARITMETICO().GetText();
+        var variable = context.VARIABLE().GetText();
+        var translation = $"{operador} {variable}";
+        return translation;
+    }
+
+    public override string VisitBlock([NotNull] SSJParser.BlockContext context)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("{");
+
+        foreach (var mostrar in context.mostrar())
+            stringBuilder.AppendLine($"    {Visit(mostrar)}");
+
+        stringBuilder.Append("}");
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitElseBlock([NotNull] SSJParser.ElseBlockContext context)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("else");
+
+        var block = Visit(context.block());
+        stringBuilder.Append(block);
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitDeclaration([NotNull] SSJParser.DeclarationContext context)
+    {
+        var type = Visit(context.type());
+        var variable1 = context.VARIABLE()[0].GetText();
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"{type} {variable1} = ");
+
+        if (context.VARIABLE().Count() > 1)
+        {
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($"{variable2}");
+        }
+
+        if (context.arithmeticOperations().Count() > 0)
+        {
+            var aritmeticos = new List<string>();
+
+            foreach (var aritmetico in context.arithmeticOperations())
+                aritmeticos.Add(Visit(aritmetico));
+
+            stringBuilder.Append($" {aritmeticos.First()}");
+
+            if (aritmeticos.Count() > 1)
+                stringBuilder.Append($" {string.Join(" ", aritmeticos.Skip(1))};");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitPostDeclaration([NotNull] SSJParser.PostDeclarationContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"{variable1} = ");
+
+        if (context.VARIABLE().Count() > 1)
+        {
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($"{variable2}");
+        }
+
+        if (context.arithmeticOperations().Count() > 0)
+        {
+            var aritmeticos = new List<string>();
+
+            foreach (var aritmetico in context.arithmeticOperations())
+                aritmeticos.Add(Visit(aritmetico));
+
+            stringBuilder.Append($" {aritmeticos.First()}");
+
+            if (aritmeticos.Count() > 1)
+                stringBuilder.Append($" {string.Join(" ", aritmeticos.Skip(1))};");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
     }
 
     public override string VisitType([NotNull] SSJParser.TypeContext context)
     {
-        return base.VisitType(context);
+        var type = context.GetText();
+        return type;
+    }
+
+    public override string VisitFor([NotNull] SSJParser.ForContext context)
+    {
+        var declaration = Visit(context.declaration()) ?? Visit(context.postDeclaration());
+        var conditionalLoop = Visit(context.conditionalLoop());
+        var operationLoop = Visit(context.operationLoop());
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"for ({declaration}; {conditionalLoop}; {operationLoop})");
+        stringBuilder.AppendLine("{");
+
+        foreach (var mostrar in context.mostrar())
+            stringBuilder.AppendLine($"    {Visit(mostrar)}");
+
+        stringBuilder.Append("}");
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitWhile([NotNull] SSJParser.WhileContext context)
+    {
+        var stringBuilder = new StringBuilder();
+
+        var conditionalLoop = Visit(context.conditionalLoop());
+        var blocks = new List<string>();
+
+        foreach (var mostrar in context.mostrar())
+            blocks.Add(Visit(mostrar));
+
+        stringBuilder.AppendLine($"while ({conditionalLoop})");
+        stringBuilder.AppendLine("{");
+
+        foreach (var block in blocks)
+            stringBuilder.AppendLine($"    {block}");
+
+        stringBuilder.Append("}");
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitOperationLoop([NotNull] SSJParser.OperationLoopContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"{variable1}");
+
+        if (context.OPERADOR_ARITMETICO() != null)
+        {
+            foreach (var operador in context.OPERADOR_ARITMETICO())
+            {
+                stringBuilder.Append($"{operador}");
+                var igual = context.IGUAL();
+                if (igual != null)
+                    stringBuilder.Append($"{igual.GetText()}");
+            }
+        }
+
+        if (context.VARIABLE().Count() > 1)
+        {
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($" {variable2}");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitRelationalLoop([NotNull] SSJParser.RelationalLoopContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"{variable1}");
+
+        if (context.OPERADOR_RELACIONAL() != null)
+        {
+            var operador = context.OPERADOR_RELACIONAL().GetText();
+            stringBuilder.Append($" {operador}");
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($" {variable2}");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitAritmeticoLoop([NotNull] SSJParser.AritmeticoLoopContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"{variable1}");
+
+        if (context.OPERADOR_RELACIONAL() != null)
+        {
+            var operador = context.OPERADOR_RELACIONAL().GetText();
+            stringBuilder.Append($" {operador}");
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($" {variable2}");
+        }
+
+        if (context.arithmeticOperations().Count() > 0)
+        {
+            var aritmeticos = new List<string>();
+
+            foreach (var aritmetico in context.arithmeticOperations())
+                aritmeticos.Add(Visit(aritmetico));
+
+            stringBuilder.Append($" {aritmeticos.First()}");
+
+            if (aritmeticos.Count() > 1)
+                stringBuilder.Append($" {string.Join(" ", aritmeticos.Skip(1))}");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
     }
 }
