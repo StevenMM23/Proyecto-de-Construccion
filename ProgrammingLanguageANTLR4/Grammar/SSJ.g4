@@ -10,7 +10,7 @@ mostrar:
 	| loopCommand;
 
 declaration:
-	type VARIABLE (IGUAL VARIABLE)? arithmeticOperations*?;
+	type VARIABLE (IGUAL VARIABLE)? arithmeticOperations*;
 
 postDeclaration:
 	VARIABLE (IGUAL VARIABLE)? arithmeticOperations*;

@@ -9,4 +9,6 @@ else
 {
     show("else")
 }
-int gg = 22
+int gg = 22 + 33 - 44 * 55
+
+gg = 33 - 12 + "ggg"

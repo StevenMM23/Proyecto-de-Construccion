@@ -136,20 +136,50 @@ internal class Visitor : SSJBaseVisitor<string>
         if (context.VARIABLE().Count() > 1)
         {
             var variable2 = context.VARIABLE()[1].GetText();
-            stringBuilder.Append($"{variable2};");
+            stringBuilder.Append($"{variable2}");
         }
 
-        if (context.arithmeticOperations().Count() > 1)
+        if (context.arithmeticOperations().Count() > 0)
         {
             var aritmeticos = new List<string>();
 
             foreach (var aritmetico in context.arithmeticOperations())
                 aritmeticos.Add(Visit(aritmetico));
 
-            stringBuilder.Append($"{aritmeticos.First()}");
+            stringBuilder.Append($" {aritmeticos.First()}");
 
             if (aritmeticos.Count() > 1)
-                stringBuilder.Append($" {aritmeticos.Last()}");
+                stringBuilder.Append($" {string.Join(" ", aritmeticos.Skip(1))};");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitPostDeclaration([NotNull] SSJParser.PostDeclarationContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"{variable1} = ");
+
+        if (context.VARIABLE().Count() > 1)
+        {
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($"{variable2}");
+        }
+
+        if (context.arithmeticOperations().Count() > 0)
+        {
+            var aritmeticos = new List<string>();
+
+            foreach (var aritmetico in context.arithmeticOperations())
+                aritmeticos.Add(Visit(aritmetico));
+
+            stringBuilder.Append($" {aritmeticos.First()}");
+
+            if (aritmeticos.Count() > 1)
+                stringBuilder.Append($" {string.Join(" ", aritmeticos.Skip(1))};");
         }
 
         var translation = stringBuilder.ToString();
