@@ -9,6 +9,11 @@ else
 {
     show("else")
 }
-int gg = 22 + 33 - 44 * 55
 
+int gg = 22 + 33 - 44 * 55
 gg = 33 - 12 + "ggg"
+
+for (int i = 0; i < 20; i++)
+{
+    show(i)
+}

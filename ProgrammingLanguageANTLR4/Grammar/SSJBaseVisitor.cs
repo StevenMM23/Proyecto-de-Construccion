@@ -115,7 +115,7 @@ public partial class SSJBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// <return>The visitor result.</return>
 	public virtual Result VisitIfCommand([NotNull] SSJParser.IfCommandContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>relational</c>
+	/// Visit a parse tree produced by the <c>relationalIf</c>
 	/// labeled alternative in <see cref="SSJParser.ifConditional"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -124,9 +124,9 @@ public partial class SSJBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitRelational([NotNull] SSJParser.RelationalContext context) { return VisitChildren(context); }
+	public virtual Result VisitRelationalIf([NotNull] SSJParser.RelationalIfContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>aritmetico</c>
+	/// Visit a parse tree produced by the <c>aritmeticoIf</c>
 	/// labeled alternative in <see cref="SSJParser.ifConditional"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -135,9 +135,10 @@ public partial class SSJBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitAritmetico([NotNull] SSJParser.AritmeticoContext context) { return VisitChildren(context); }
+	public virtual Result VisitAritmeticoIf([NotNull] SSJParser.AritmeticoIfContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.loopCommand"/>.
+	/// Visit a parse tree produced by the <c>for</c>
+	/// labeled alternative in <see cref="SSJParser.loopCommand"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -145,9 +146,10 @@ public partial class SSJBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitLoopCommand([NotNull] SSJParser.LoopCommandContext context) { return VisitChildren(context); }
+	public virtual Result VisitFor([NotNull] SSJParser.ForContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.declarationLoop"/>.
+	/// Visit a parse tree produced by the <c>while</c>
+	/// labeled alternative in <see cref="SSJParser.loopCommand"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -155,9 +157,10 @@ public partial class SSJBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitDeclarationLoop([NotNull] SSJParser.DeclarationLoopContext context) { return VisitChildren(context); }
+	public virtual Result VisitWhile([NotNull] SSJParser.WhileContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SSJParser.conditionalLoop"/>.
+	/// Visit a parse tree produced by the <c>relationalLoop</c>
+	/// labeled alternative in <see cref="SSJParser.conditionalLoop"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -165,7 +168,18 @@ public partial class SSJBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitConditionalLoop([NotNull] SSJParser.ConditionalLoopContext context) { return VisitChildren(context); }
+	public virtual Result VisitRelationalLoop([NotNull] SSJParser.RelationalLoopContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>aritmeticoLoop</c>
+	/// labeled alternative in <see cref="SSJParser.conditionalLoop"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitAritmeticoLoop([NotNull] SSJParser.AritmeticoLoopContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SSJParser.operationLoop"/>.
 	/// <para>

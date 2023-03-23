@@ -11,7 +11,7 @@ var parser = new SSJParser(tokenStream);
 var tree = parser.program();
 var visitor = new Visitor();
 
-var translation = visitor.Visit(tree).ToString();
+var translation = visitor.Visit(tree);
 Console.WriteLine(translation);
 
 // Console.ReadKey(true);

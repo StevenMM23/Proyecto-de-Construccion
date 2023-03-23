@@ -56,7 +56,7 @@ internal class Visitor : SSJBaseVisitor<string>
         return translation;
     }
 
-    public override string VisitRelational([NotNull] SSJParser.RelationalContext context)
+    public override string VisitRelationalIf([NotNull] SSJParser.RelationalIfContext context)
     {
         var variable1 = context.VARIABLE()[0].GetText();
         var variable2 = context.VARIABLE()[1].GetText();
@@ -69,15 +69,13 @@ internal class Visitor : SSJBaseVisitor<string>
         return translation;
     }
 
-    public override string VisitAritmetico([NotNull] SSJParser.AritmeticoContext context)
+    public override string VisitAritmeticoIf([NotNull] SSJParser.AritmeticoIfContext context)
     {
         var variable1 = context.VARIABLE()[0].GetText();
         var variable2 = context.VARIABLE()[1].GetText();
         var operador = context.OPERADOR_RELACIONAL().GetText();
 
         var aritmeticos = new List<string>();
-
-        System.Console.WriteLine(context.arithmeticOperations().Count());
 
         foreach (var aritmetico in context.arithmeticOperations())
             aritmeticos.Add(Visit(aritmetico));
@@ -190,5 +188,102 @@ internal class Visitor : SSJBaseVisitor<string>
     {
         var type = context.GetText();
         return type;
+    }
+
+    public override string VisitFor([NotNull] SSJParser.ForContext context)
+    {
+        var declaration = Visit(context.declaration()) ?? Visit(context.postDeclaration());
+        var conditionalLoop = Visit(context.conditionalLoop());
+        var operationLoop = Visit(context.operationLoop());
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append($"for ({declaration}; {conditionalLoop}; {operationLoop})");
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitWhile([NotNull] SSJParser.WhileContext context)
+    {
+        return base.VisitWhile(context);
+    }
+
+    public override string VisitOperationLoop([NotNull] SSJParser.OperationLoopContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"{variable1}");
+
+        if (context.OPERADOR_ARITMETICO() != null)
+        {
+            foreach (var operador in context.OPERADOR_ARITMETICO())
+            {
+                stringBuilder.Append($"{operador}");
+                var igual = context.IGUAL().GetText();
+                if (igual != null)
+                    stringBuilder.Append($"{igual}");
+            }
+        }
+
+        if (context.VARIABLE().Count() > 1)
+        {
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($" {variable2}");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitRelationalLoop([NotNull] SSJParser.RelationalLoopContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"{variable1}");
+
+        if (context.OPERADOR_RELACIONAL() != null)
+        {
+            var operador = context.OPERADOR_RELACIONAL().GetText();
+            stringBuilder.Append($" {operador}");
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($" {variable2}");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
+    }
+
+    public override string VisitAritmeticoLoop([NotNull] SSJParser.AritmeticoLoopContext context)
+    {
+        var variable1 = context.VARIABLE()[0].GetText();
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"{variable1}");
+
+        if (context.OPERADOR_RELACIONAL() != null)
+        {
+            var operador = context.OPERADOR_RELACIONAL().GetText();
+            stringBuilder.Append($" {operador}");
+            var variable2 = context.VARIABLE()[1].GetText();
+            stringBuilder.Append($" {variable2}");
+        }
+
+        if (context.arithmeticOperations().Count() > 0)
+        {
+            var aritmeticos = new List<string>();
+
+            foreach (var aritmetico in context.arithmeticOperations())
+                aritmeticos.Add(Visit(aritmetico));
+
+            stringBuilder.Append($" {aritmeticos.First()}");
+
+            if (aritmeticos.Count() > 1)
+                stringBuilder.Append($" {string.Join(" ", aritmeticos.Skip(1))}");
+        }
+
+        var translation = stringBuilder.ToString();
+        return translation;
     }
 }
