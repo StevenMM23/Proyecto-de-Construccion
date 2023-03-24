@@ -1,30 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
+using ProgrammingLanguageANTLR4;
 
-namespace ProgrammingLanguageANTLR4
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            var project = File.ReadAllText($"C:\\Users\\estev\\Desktop\\ProyectoLanguage\\ProgrammingLanguageANTLR4\\test.txt");
-            var inputStream = CharStreams.fromString(project);
-            var lexer = new SSJLexer(inputStream);
-            var tokenStream = new CommonTokenStream(lexer);
-            var parser = new SSJParser(tokenStream);
+var project = File.ReadAllText($"{Environment.CurrentDirectory}/Files/test.txt");
 
-            var tree = parser.program();
-            var visitor = new myVisitor();
+var inputStream = CharStreams.fromString(project);
+var lexer = new SSJLexer(inputStream);
+var tokenStream = new CommonTokenStream(lexer);
+var parser = new SSJParser(tokenStream);
 
-            var translation = visitor.Visit(tree);
-            Console.WriteLine(translation);
+var tree = parser.program();
+var visitor = new Visitor();
 
-            Console.ReadKey(true);
-        }
-    }
-}
+var translation = visitor.Visit(tree);
+Console.WriteLine(translation);
+
+// Console.ReadKey(true);
